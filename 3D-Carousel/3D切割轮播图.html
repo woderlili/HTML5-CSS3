@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>切割轮播图</title>
+	<link rel="stylesheet" href="./css/font-awesome.min.css">
+	<style>
+		html,
+		body,
+		ul {
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+		}
+
+		ul {
+			list-style: none;
+		}
+
+		.view {
+			position: relative;
+			margin: 100px auto;
+			width: 560px;
+			height: 300px;
+			/* background-color: red; */
+			box-shadow: 0 0 1px #000;
+		}
+
+		ul {
+			width: 100%;
+			height: 100%;
+		}
+
+		li {
+			float: left;
+			position: relative;
+			/* calc() 是CSS3中的一个方法 calc()  是做混合运算(加减乘除)
+				 calc是计算器  windows+ r
+				 注意: 一定要在运算符两边加空格
+			*/
+			width: calc(560px / 5);
+			height: 100%;
+			/* background-color: red; */
+			/* 让子元素显示成3D效果 
+				 flat 平面
+				 preserve-3d 3d效果
+			*/
+			transform-style: preserve-3d;
+
+			transform: rotateX(0deg);
+
+			transition: all 1s;
+		}
+
+		li:nth-child(2) span {
+			background-position: -112px;
+		}
+
+		li:nth-child(3) span {
+			background-position: -224px;
+		}
+
+		li:nth-child(4) span {
+			background-position: -336px;
+		}
+
+		li:nth-child(5) span {
+			background-position: -448px;
+		}
+
+		li span {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		span:nth-child(1) {
+			background-image: url("./image/first.jpg");
+			transform: translateZ(150px);
+		}
+
+		span:nth-child(2) {
+			background-image: url("./image/second.jpg");
+			transform: rotateX(90deg) translateZ(150px);
+		}
+
+		span:nth-child(3) {
+			background-image: url("./image/third.jpg");
+			transform: rotateX(180deg) translateZ(150px);
+		}
+
+		span:nth-child(4) {
+			background-image: url("./image/fourth.jpg");
+			/* transform: rotateX(360deg) translateZ(150px);  因为360deg等于没动 因此删掉 */
+			/* transform:  translateZ(150px); */
+			transform: rotateX(270deg) translateZ(150px);
+		}
+
+
+		li:nth-child(2) {
+			transition-delay: 0.25s;
+		}
+
+		li:nth-child(3) {
+			transition-delay: 0.5s;
+		}
+
+		li:nth-child(4) {
+			transition-delay: 0.75s;
+		}
+
+		li:nth-child(5) {
+			transition-delay: 1s;
+		}
+
+		a.fa {
+			/* 清除a标签的下划线 */
+			text-decoration: none;
+
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 30px;
+			color: #fff;
+		}
+
+		.prev {
+			left: 0;
+		}
+
+		.next {
+			right: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- div.view > ul > li*5 > span*4 -->
+
+	<div class="view">
+		<ul>
+			<!-- 图片的1/5 -->
+			<li class="first">
+				<!-- 上 -->
+				<span></span>
+				<!-- 下 -->
+				<span></span>
+				<!-- 前 -->
+				<span></span>
+				<!-- 后 -->
+				<span></span>
+			</li>
+
+			<li>
+				<!-- 上 -->
+				<span></span>
+				<!-- 下 -->
+				<span></span>
+				<!-- 前 -->
+				<span></span>
+				<!-- 后 -->
+				<span></span>
+			</li>
+
+			<li>
+				<!-- 上 -->
+				<span></span>
+				<!-- 下 -->
+				<span></span>
+				<!-- 前 -->
+				<span></span>
+				<!-- 后 -->
+				<span></span>
+			</li>
+
+			<li>
+				<!-- 上 -->
+				<span></span>
+				<!-- 下 -->
+				<span></span>
+				<!-- 前 -->
+				<span></span>
+				<!-- 后 -->
+				<span></span>
+			</li>
+
+			<li>
+				<!-- 上 -->
+				<span></span>
+				<!-- 下 -->
+				<span></span>
+				<!-- 前 -->
+				<span></span>
+				<!-- 后 -->
+				<span></span>
+			</li>
+		</ul>
+
+		<!-- 左右点击按钮 -->
+		<a href="javascript:;" class="prev fa fa-chevron-left"></a>
+		<a href="javascript:;" class="next fa fa-chevron-right"></a>
+	</div>
+	<script>
+		// 1.获取元素(按钮  li)
+		var prev = document.querySelector(".prev");
+		var next = document.querySelector('.next');
+		var li = document.querySelectorAll("li");
+		var lir = document.querySelector('li');
+
+		console.log(li);
+		var lastLi = document.querySelector("li:last-child");
+		// console.log(lastLi);
+		// 声明一个 变量  记录点击次数
+		var num = 0;
+		// 声明一个boolean变量
+		var bool = true;
+
+		// 监听最后一个li过渡是否完成
+		lastLi.addEventListener("transitionend", function () {
+			// console.log(1);
+			// 当最后一个li过渡完成  让bool 变成true
+			bool = true;
+		})
+		// 2.给左右按钮绑定事件
+		prev.onclick = function () {
+			if (bool == false) {return;}
+			bool = false;
+			num++;
+			// 3.遍历li
+			for (var i = 0; i < li.length; i++) {
+				// 4.给li添加转换样式
+				li[i].style.transform = 'rotateX(' + num * 90 + 'deg)';
+			}
+
+		}
+
+		next.onclick = function () {
+			if (bool == false) {return;}
+			bool = false;
+			num--;
+			// 3.遍历li
+			for (var i = 0; i < li.length; i++) {
+				// 4.给li添加转换样式
+				li[i].style.transform = 'rotateX(' + num * 90 + 'deg)';
+			}
+		}
+	</script>
+</body>
+
+</html>
+
+<!-- 使用图标字体的步骤(font-awesome):
+			1.引入包(css文件 fonts文件)
+			2.把css引入html中
+			3.使用类名调用图标字体
+-->
+
+
+<!-- 如果切割轮播图急点两次,第二次会让轮播图出现不好看的问题(开闭原则) -->
+<!-- 目标: 急点两次  只有第一次起作用 第二次等到轮播图转完 再起作用 -->
+<!-- 方案：
+			1.监听最后一个li过渡是否完成 transitionEnd事件
+			2.如果完成 第二次点击起作用
+			3.如果过渡没有完成 第二次点击无效
+
+			
+			过程: 
+				1.声明了一个变量 bool = true
+				2.在点击事件中 判断 bool 是否为 false  把后面的代码跳出  return 
+				3.紧接着把bool的值变为false
+
+
+
+			
+			bool = true
+
+			点击一次 :
+					判断  true == false ？ 不等于   就不退出
+					走代码  bool = false
+					走代码  num--;
+					li旋转
+
+			点第二次
+					判断 false == false  等于   退出代码 
+
+			两次中间隔过渡完成呢？
+
+		写代码 边写边测试
+-->
